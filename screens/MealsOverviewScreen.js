@@ -1,12 +1,12 @@
 import { View } from "react-native";
-import { MEALS } from "../data/dummy-data";
+import { MEALS, CATEGORIES } from "../data/dummy-data";
 import { StyleSheet } from "react-native";
 import { Text } from "react-native";
-import { useMemo } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
 import { FlatList } from "react-native";
 import MealItem from "../components/MealItem";
 
-const MealsOverviewScreen = ({ route }) => {
+const MealsOverviewScreen = ({ route, navigation }) => {
   const categoryId = route.params.categoryId;
 
   const displayedMeals = useMemo(
@@ -15,8 +15,16 @@ const MealsOverviewScreen = ({ route }) => {
   );
 
   const renderMealItem = (itemData) => {
-    return <MealItem title={itemData.item.title} />;
+    return <MealItem {...itemData.item} />;
   };
+
+  useLayoutEffect(() => {
+    const categoryTitle = CATEGORIES.find(
+      (category) => category.id == categoryId
+    ).title;
+
+    navigation.setOptions({ title: categoryTitle });
+  }, []);
 
   return (
     <View style={styles.container}>
