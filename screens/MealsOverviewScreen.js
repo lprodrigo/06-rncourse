@@ -15,7 +15,14 @@ const MealsOverviewScreen = ({ route, navigation }) => {
   );
 
   const renderMealItem = (itemData) => {
-    return <MealItem {...itemData.item} />;
+    return (
+      <MealItem
+        {...itemData.item}
+        onPress={() =>
+          navigation.navigate("MealDetails", { mealId: itemData.item.id })
+        }
+      />
+    );
   };
 
   useLayoutEffect(() => {

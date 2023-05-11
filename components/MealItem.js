@@ -3,23 +3,32 @@ import { Image } from "react-native";
 import { Pressable } from "react-native";
 import { Text } from "react-native";
 import { View } from "react-native";
+import MealDetails from "./MealDetails";
 
-const MealItem = ({ title, imageUrl, duration, complexity, affordability }) => {
+const MealItem = ({
+  title,
+  imageUrl,
+  duration,
+  complexity,
+  affordability,
+  onPress,
+}) => {
   return (
     <View style={style.mealItem}>
       <Pressable
         android_ripple={{ color: "#ccc" }}
         style={({ pressed }) => (pressed ? style.buttonPressed : null)}
+        onPress={onPress}
       >
         <View>
           <Image source={{ uri: imageUrl }} style={style.image} />
           <Text style={style.title}>{title}</Text>
         </View>
-        <View style={style.details}>
-          <Text style={style.detailItem}>{duration}</Text>
-          <Text style={style.detailItem}>{complexity.toUpperCase()}</Text>
-          <Text style={style.detailItem}>{affordability.toUpperCase()}</Text>
-        </View>
+        <MealDetails
+          duration={duration}
+          complexity={complexity}
+          affordability={affordability}
+        />
       </Pressable>
     </View>
   );
@@ -40,16 +49,6 @@ const style = StyleSheet.create({
     shadowRadius: 8,
     backgroundColor: "white",
     overflow: Platform.select({ android: "hidden", ios: "visible" }),
-  },
-  details: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 8,
-    justifyContent: "center",
-    gap: 4,
-  },
-  detailItem: {
-    fontSize: 12,
   },
   buttonPressed: {
     opacity: 0.5,
