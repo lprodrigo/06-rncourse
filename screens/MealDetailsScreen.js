@@ -8,8 +8,26 @@ import { StyleSheet } from "react-native";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
 import { ScrollView } from "react-native";
+import { useLayoutEffect } from "react";
+import IconButton from "../components/IconButton";
 
-const MealDetailsScreen = ({ route }) => {
+const MealDetailsScreen = ({ route, navigation }) => {
+  const handleButtonPressHandler = () => {
+    console.log("press");
+  };
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconButton
+          title="Hello"
+          onPress={handleButtonPressHandler}
+          color="white"
+          icon="star"
+        />
+      ),
+    });
+  }, [navigation, handleButtonPressHandler]);
+
   const mealId = route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id == mealId);
 
