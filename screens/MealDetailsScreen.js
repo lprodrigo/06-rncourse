@@ -8,12 +8,26 @@ import { StyleSheet } from "react-native";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
 import { ScrollView } from "react-native";
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import IconButton from "../components/IconButton";
+import { FavoritesContext } from "../store/context/favorites-context";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite, removeFavorite } from "../store/redux/favorites";
 
 const MealDetailsScreen = ({ route, navigation }) => {
+  // const { ids, addFavorite, removeFavorite } = useContext(FavoritesContext);
+
+  const ids = useSelector((state) => state.favoriteMeals.ids);
+  const dispatch = useDispatch();
+
+  const mealId = route.params.mealId;
+  const selectedMeal = MEALS.find((meal) => meal.id == mealId);
+  const mealIsFavorite = ids.includes(mealId);
+
   const handleButtonPressHandler = () => {
-    console.log("press");
+    !mealIsFavorite
+      ? dispatch(addFavorite({ id: mealId }))
+      : dispatch(removeFavorite({ id: mealId }));
   };
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -22,14 +36,11 @@ const MealDetailsScreen = ({ route, navigation }) => {
           title="Hello"
           onPress={handleButtonPressHandler}
           color="white"
-          icon="star"
+          icon={mealIsFavorite ? "star" : "star-outline"}
         />
       ),
     });
   }, [navigation, handleButtonPressHandler]);
-
-  const mealId = route.params.mealId;
-  const selectedMeal = MEALS.find((meal) => meal.id == mealId);
 
   return (
     <ScrollView style={styles.root}>
